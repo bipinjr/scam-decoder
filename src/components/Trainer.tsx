@@ -1,8 +1,22 @@
 "use client";
 
-import { useState, type CSSProperties } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import type { Tactic } from "@/lib/shared";
 import { CITATIONS, PRINCIPLES, type PrincipleId } from "@/lib/principles";
+import { Confetti } from "./fx";
+
+const RANKS = [
+  { name: "Rookie", min: 0 },
+  { name: "Scam Spotter", min: 3 },
+  { name: "Fraud Detective", min: 8 },
+  { name: "Cyber Guardian", min: 15 },
+];
+type Stats = { rounds: number; caught: number; streak: number; best: number };
+const KEY = "scam-decoder-practice";
+function loadStats(): Stats {
+  try { return { rounds: 0, caught: 0, streak: 0, best: 0, ...JSON.parse(localStorage.getItem(KEY) || "{}") }; } catch { return { rounds: 0, caught: 0, streak: 0, best: 0 }; }
+}
+function saveStats(st: Stats) { try { localStorage.setItem(KEY, JSON.stringify(st)); } catch {} }
 
 type Trick = { quote: string; principle?: PrincipleId; why: string };
 type Drill = { message: string; tricks: Trick[] };
@@ -30,6 +44,9 @@ export function Trainer({ seed, language }: { seed?: Tactic[]; language: string 
   const [revealed, setRevealed] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [stats, setStats] = useState<Stats>({ rounds: 0, caught: 0, streak: 0, best: 0 });
+  const [party, setParty] = useState(0);
+  useEffect(() => setStats(loadStats()), []);
 
   async function newDrill() {
     setLoading(true);
@@ -59,6 +76,19 @@ export function Trainer({ seed, language }: { seed?: Tactic[]; language: string 
   const score = caught.filter(Boolean).length;
   const falseTaps = parsed ? [...picked].filter((i) => parsed.owner[i] === -1).length : 0;
 
+  function reveal() {
+    setRevealed(true);
+    const perfect = total > 0 && score === total && falseTaps === 0;
+    const next = { rounds: stats.rounds + 1, caught: stats.caught + score, streak: perfect ? stats.streak + 1 : 0, best: 0 };
+    next.best = Math.max(stats.best, next.streak);
+    setStats(next);
+    saveStats(next);
+    if (perfect) setParty(Date.now());
+  }
+  const rankIdx = RANKS.reduce((acc, r, i) => (stats.caught >= r.min ? i : acc), 0);
+  const nextRank = RANKS[rankIdx + 1];
+  const progress = nextRank ? (stats.caught - RANKS[rankIdx].min) / (nextRank.min - RANKS[rankIdx].min) : 1;
+
   return (
     <section id="practice" className="relative scroll-mt-20 border-y hairline bg-night py-24 text-white">
       <div className="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-[minmax(0,22rem)_1fr]">
@@ -86,6 +116,23 @@ export function Trainer({ seed, language }: { seed?: Tactic[]; language: string 
             {loading ? "Writing a practice message…" : drill ? "Give me another one" : seed?.length ? "Practise the tricks you just saw" : "Give me a practice message"}
           </button>
           {error && <p role="alert" className="mt-4 font-bold text-[#ff8a80]">{error}</p>}
+          {party > 0 && <Confetti key={party} />}
+          {stats.rounds > 0 && (
+            <div className="card pop mt-8 p-5" aria-live="polite">
+              <div className="flex items-baseline justify-between gap-3">
+                <p className="text-sm text-ink-soft">Your rank</p>
+                <p className="font-mono text-sm text-ink-soft">streak {stats.streak} · best {stats.best}</p>
+              </div>
+              <p key={RANKS[rankIdx].name} className="pop mt-1 font-pen text-4xl font-bold text-red">{RANKS[rankIdx].name}</p>
+              <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/10">
+                <div className="rank-bar h-full rounded-full bg-gradient-to-r from-red via-[#ff3b5c] to-violet" style={{ transform: `scaleX(${Math.min(1, progress)})` }} />
+              </div>
+              <p className="mt-2 text-sm text-ink-soft">
+                {stats.caught} tricks caught in {stats.rounds} round{stats.rounds > 1 ? "s" : ""}
+                {nextRank ? ` · ${nextRank.min - stats.caught} more to ${nextRank.name}` : " · top rank reached"}
+              </p>
+            </div>
+          )}
         </div>
 
         <div className="reveal">
@@ -99,7 +146,7 @@ export function Trainer({ seed, language }: { seed?: Tactic[]; language: string 
                 <span className="rounded-full bg-amber-wash px-3 py-1 text-sm font-bold text-amber">Practice message · made up</span>
                 {revealed && (
                   <span className="font-pen text-3xl font-bold text-red" aria-live="polite">
-                    {score} / {total} caught{falseTaps ? `, ${falseTaps} extra` : ""}
+                    {score === total && !falseTaps ? "Perfect! " : ""}{score} / {total} caught{falseTaps ? `, ${falseTaps} extra` : ""}
                   </span>
                 )}
               </div>
@@ -124,7 +171,7 @@ export function Trainer({ seed, language }: { seed?: Tactic[]; language: string 
                 })}
               </p>
               {!revealed ? (
-                <button onClick={() => setRevealed(true)} disabled={!picked.size} className="mt-6 rounded-2xl bg-white px-6 py-3 font-semibold text-night transition hover:bg-white/90 disabled:opacity-40">
+                <button onClick={reveal} disabled={!picked.size} className="mt-6 rounded-2xl bg-white px-6 py-3 font-semibold text-night transition hover:bg-white/90 disabled:opacity-40">
                   Check my answers
                 </button>
               ) : (

@@ -1,6 +1,8 @@
 import Link from "next/link";
 import type { CSSProperties } from "react";
-import { CountUp, SpotlightGroup, Tilt } from "@/components/fx";
+import { CountUp, CursorLight, DecodeText, SpotlightGroup, Tilt } from "@/components/fx";
+import { RadarScope } from "@/components/RadarScope";
+import { Dissection } from "@/components/Dissection";
 import { Ticker } from "@/components/Ticker";
 import { CITATIONS } from "@/lib/principles";
 import { BENCHMARK } from "@/lib/benchmark";
@@ -25,12 +27,13 @@ const CHIPS = [
 function HeroPhone() {
   return (
     <div className="relative mx-auto w-[min(21rem,82vw)]">
+      <RadarScope className="left-1/2 top-1/2 w-[175%] -translate-x-1/2 -translate-y-1/2" />
       {CHIPS.map((c) => (
         <span key={c.label} className="chip hidden sm:inline-flex" style={{ ...c.style, "--d": c.d } as unknown as CSSProperties}>
           <span className="dot" aria-hidden />{c.label}
         </span>
       ))}
-      <Tilt>
+      <Tilt className="relative z-[1]">
         <div className="phone phone-in">
           <div className="phone-screen">
             <div className="phone-notch" aria-hidden />
@@ -42,7 +45,8 @@ function HeroPhone() {
               </div>
               <span className="ml-auto rounded-full bg-red-wash px-2.5 py-1 text-xs font-bold text-red">3 red flags</span>
             </div>
-            <div className="chat-wall px-4 py-6">
+            <div className="chat-wall relative overflow-hidden px-4 py-6">
+              <span className="scanline" aria-hidden />
               <div className="bubble max-w-[94%] bg-chat px-4 py-3 text-[0.95rem] leading-[1.9] text-ink" style={{ "--bubble-bg": "var(--color-chat)" } as CSSProperties}>
                 {DEMO.map((d, i) =>
                   d.m ? (
@@ -134,6 +138,7 @@ export default function Home() {
       <section className="relative isolate overflow-hidden">
         <div className="mesh" aria-hidden />
         <div className="grid-bg" aria-hidden />
+        <CursorLight />
         <div className="hero-parallax relative mx-auto grid max-w-7xl items-center gap-16 px-4 pb-20 pt-16 sm:px-6 lg:grid-cols-[1.1fr_1fr] lg:pb-28 lg:pt-24">
           <div className="stagger">
             <p className="glass inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-sm text-ink">
@@ -141,15 +146,15 @@ export default function Home() {
               Research-backed · 9 Indian languages · free
             </p>
             <h1 className="mt-6 text-[2.7rem] font-semibold leading-[1.04] tracking-[-0.035em] sm:text-7xl">
-              <span className="text-gradient">Stop the scam</span><br />
-              <span className="text-threat">before it stops you.</span>
+              <span className="text-gradient"><DecodeText text="Stop the scam" /></span><br />
+              <span className="text-threat"><DecodeText text="before it stops you." delay={300} duration={1300} /></span>
             </h1>
             <p className="mt-6 max-w-xl text-lg text-ink-soft sm:text-xl">
               Paste a message, record a call or drop a screenshot. Scam Decoder shows every trick it uses to fool you, in plain
               words, in your language, and teaches you to spot the next one.
             </p>
             <div className="mt-9 flex flex-wrap gap-3">
-              <Link href="/check" className="btn-primary rounded-xl px-6 py-3.5 text-lg">Check a message free</Link>
+              <Link href="/check" className="aurora btn-primary rounded-xl px-6 py-3.5 text-lg">Check a message free</Link>
               <Link href="/radar" className="btn-ghost rounded-xl px-6 py-3.5 text-lg">See the Scam Radar</Link>
             </div>
             <dl className="mt-10 flex flex-wrap gap-x-8 gap-y-3 text-sm text-ink-soft">
@@ -206,6 +211,8 @@ export default function Home() {
           ))}
         </SpotlightGroup>
       </section>
+
+      <Dissection />
 
       {/* How it works */}
       <section className="mx-auto mt-28 grid max-w-7xl gap-14 px-4 sm:px-6 lg:grid-cols-[minmax(0,24rem)_1fr]">

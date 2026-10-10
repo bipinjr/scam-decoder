@@ -1,6 +1,7 @@
 import { useState, type CSSProperties } from "react";
 import type { Analysis } from "@/lib/shared";
 import { PRINCIPLES } from "@/lib/principles";
+import { Confetti } from "./fx";
 
 const SPEECH_LANG: Record<string, string> = {
   English: "en-IN", Hindi: "hi-IN", Tamil: "ta-IN", Telugu: "te-IN", Bengali: "bn-IN",
@@ -128,7 +129,9 @@ export function Result({
   );
 
   return (
-    <div className="result-in" style={{ "--pen": v.pen } as CSSProperties}>
+    <div className={`result-in ${result.verdict === "scam" ? "shake" : ""}`} style={{ "--pen": v.pen } as CSSProperties}>
+      {result.verdict === "scam" && <div className="flash" aria-hidden />}
+      {result.verdict === "likely_safe" && <Confetti colors={["#2bd48a", "#38bdf8", "#ffffff", "#7c5cff"]} />}
       {/* Verdict */}
       <section className="flex flex-wrap items-center gap-x-8 gap-y-5">
         <div className="stamp px-5 py-2 text-3xl font-bold uppercase sm:text-4xl" style={{ color: v.pen }}>

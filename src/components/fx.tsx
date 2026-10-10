@@ -67,3 +67,94 @@ export function Tilt({ children, max = 10, className = "" }: { children: React.R
     </div>
   );
 }
+
+const GLYPHS = "ABCDEFGHJKLMNPQRSTUVWXYZ#%&@$₹?!कखगघजतपमरस0123456789";
+
+// Letters scramble through glyphs and lock into place, left to right. Final text is server-rendered,
+// screen readers get it via aria-label, and nothing animates under reduced motion.
+export function DecodeText({ text, delay = 0, duration = 1100 }: { text: string; delay?: number; duration?: number }) {
+  const [shown, setShown] = useState(text);
+  useEffect(() => {
+    if (reduced()) return;
+    let raf = 0;
+    const t0 = performance.now() + delay;
+    const tick = (t: number) => {
+      const p = Math.max(0, Math.min(1, (t - t0) / duration));
+      const locked = Math.floor(p * text.length);
+      setShown(
+        text.split("").map((ch, i) => (ch === " " || i < locked ? ch : GLYPHS[(Math.random() * GLYPHS.length) | 0])).join(""),
+      );
+      if (p < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [text, delay, duration]);
+  return (
+    <span aria-label={text}>
+      <span aria-hidden>{shown}</span>
+    </span>
+  );
+}
+
+// Soft red light that follows the cursor across its parent section.
+export function CursorLight() {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = ref.current?.parentElement;
+    if (!el || reduced()) return;
+    const move = (e: PointerEvent) => {
+      const r = el.getBoundingClientRect();
+      ref.current!.style.setProperty("--cx", `${e.clientX - r.left}px`);
+      ref.current!.style.setProperty("--cy", `${e.clientY - r.top}px`);
+    };
+    el.addEventListener("pointermove", move);
+    return () => el.removeEventListener("pointermove", move);
+  }, []);
+  return <div ref={ref} className="cursor-light" aria-hidden />;
+}
+
+const CONFETTI = ["#ff4b3e", "#ffb020", "#2bd48a", "#38bdf8", "#7c5cff", "#ffffff"];
+
+// One-shot confetti burst from the middle of the screen. Renders nothing under reduced motion.
+export function Confetti({ count = 46, colors = CONFETTI }: { count?: number; colors?: string[] }) {
+  const [pieces] = useState(() =>
+    Array.from({ length: count }, (_, i) => {
+      const a = (Math.PI * 2 * i) / count + Math.random() * 0.4;
+      const d = 140 + Math.random() * 260;
+      return { x: Math.cos(a) * d, y: Math.sin(a) * d - 120, r: (Math.random() * 720 - 360) | 0, c: colors[i % colors.length], delay: Math.random() * 0.15 };
+    }),
+  );
+  const [on, setOn] = useState(true);
+  useEffect(() => { const t = setTimeout(() => setOn(false), 1800); return () => clearTimeout(t); }, []);
+  if (!on || reduced()) return null;
+  return (
+    <div className="confetti" aria-hidden>
+      {pieces.map((p, i) => (
+        <i key={i} style={{ background: p.c, "--x": `${p.x}px`, "--y": `${p.y}px`, "--r": `${p.r}deg`, "--d": `${p.delay}s` } as React.CSSProperties} />
+      ))}
+    </div>
+  );
+}
+
+// Primary buttons lean toward the mouse. Mounted once in the layout; mouse only, off under reduced motion.
+export function MagneticButtons() {
+  useEffect(() => {
+    if (reduced()) return;
+    let current: HTMLElement | null = null;
+    const move = (e: PointerEvent) => {
+      if (e.pointerType !== "mouse") return;
+      const el = (e.target as HTMLElement).closest<HTMLElement>(".btn-primary, .btn-ghost");
+      if (current && current !== el) { current.style.transform = ""; current = null; }
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      const dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2);
+      el.style.transform = `translate(${dx * 0.18}px, ${dy * 0.3}px)`;
+      current = el;
+    };
+    const leave = () => { if (current) { current.style.transform = ""; current = null; } };
+    document.addEventListener("pointermove", move);
+    document.addEventListener("pointerleave", leave);
+    return () => { document.removeEventListener("pointermove", move); document.removeEventListener("pointerleave", leave); };
+  }, []);
+  return null;
+}
