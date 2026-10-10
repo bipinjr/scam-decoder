@@ -57,6 +57,7 @@ const FEATURES = [
     art: <p className="text-sm leading-8 text-ink"><span className="rounded bg-white px-1.5 py-0.5 text-night">Act now</span> or your <span className="rounded bg-white px-1.5 py-0.5 text-night">account</span> closes</p>,
   },
   {
+    span: "md:col-span-2",
     title: "9 Indian languages",
     body: "Explanations in Hindi, Tamil, Telugu, Bengali, Marathi, Kannada, Malayalam, Gujarati and English, with read-aloud.",
     art: <p className="text-sm leading-7 text-ink-soft">हिन्दी · தமிழ் · తెలుగు · বাংলা · मराठी · ಕನ್ನಡ · മലയാളം · ગુજરાતી</p>,
@@ -78,7 +79,7 @@ export default function Home() {
         <div className="mesh" aria-hidden />
         <div className="grid-bg" aria-hidden />
         <CursorLight />
-        <div className="hero-parallax relative mx-auto grid max-w-7xl items-center gap-16 px-4 pb-20 pt-16 sm:px-6 lg:grid-cols-[1.1fr_1fr] lg:pb-28 lg:pt-24">
+        <div className="hero-parallax relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-16 px-4 pb-20 pt-16 sm:px-6 lg:grid-cols-[1.1fr_1fr] lg:pb-28 lg:pt-24">
           <div className="stagger">
             <p className="glass inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-sm text-ink">
               <span className="h-1.5 w-1.5 rounded-full bg-green shadow-[0_0_10px_var(--color-green)]" aria-hidden />

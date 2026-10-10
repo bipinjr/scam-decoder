@@ -6,7 +6,7 @@ export const metadata: Metadata = { title: "Scam Radar" };
 
 export default function RadarPage() {
   return (
-    <main className="relative isolate">
+    <main className="relative isolate overflow-x-clip">
       <div className="mesh opacity-40" aria-hidden />
       <header className="relative mx-auto max-w-7xl overflow-visible px-4 pb-8 pt-16 sm:px-6">
         <RadarScope className="-right-24 -top-28 hidden w-[36rem] opacity-80 md:block" />

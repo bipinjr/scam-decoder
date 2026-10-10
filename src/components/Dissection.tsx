@@ -83,7 +83,7 @@ export function Dissection() {
         </div>
 
         {/* Scrolling explanations */}
-        <ol className="space-y-[38vh] pb-[20vh] lg:pt-[8vh]">
+        <ol className="space-y-6 lg:space-y-[30vh] lg:pb-[16vh] lg:pt-[8vh]">
           {STEPS.map((s, i) => (
             <li
               key={s.title}

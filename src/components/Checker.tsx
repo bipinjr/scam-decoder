@@ -142,10 +142,10 @@ export function Checker({ children }: { children?: React.ReactNode }) {
 
   return (
     <>
-      <section id="check" className="relative mx-auto grid max-w-7xl items-center gap-12 px-4 pb-16 pt-12 sm:px-6 lg:grid-cols-[1fr_minmax(0,26rem)] lg:gap-20 lg:pt-20">
+      <section id="check" className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-12 px-4 pb-16 pt-12 sm:px-6 lg:grid-cols-[1fr_minmax(0,26rem)] lg:gap-20 lg:pt-20">
         {/* Left: intro + examples */}
-        <div className="stagger">
-          <p className="glass inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-sm text-ink">
+        <div className="stagger min-w-0">
+          <p className="glass inline-flex max-w-full items-center gap-2 rounded-full px-3.5 py-1.5 text-sm text-ink">
             <span className="h-1.5 w-1.5 rounded-full bg-green shadow-[0_0_10px_var(--color-green)]" aria-hidden />
             Rule engine runs on your device · AI explains
           </p>

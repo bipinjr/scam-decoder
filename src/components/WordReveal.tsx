@@ -1,4 +1,4 @@
-import type { CSSProperties } from "react";
+import { Fragment, type CSSProperties } from "react";
 
 // Words light up one by one as the block scrolls through the viewport (CSS scroll-driven).
 // `hl` words turn red and get a drawn underline. Plain readable text where unsupported.
@@ -11,9 +11,10 @@ export function WordReveal({ text, hl = [], className = "" }: { text: string; hl
         const key = w.replace(/[^\p{L}\p{N}₹,]/gu, "").toLowerCase();
         const isHl = hl.some((h) => key.includes(h.toLowerCase()));
         return (
-          <span key={i} className={`word ${isHl ? "hl" : ""}`} style={{ "--w": i / total } as CSSProperties}>
-            {w}{i < total - 1 ? " " : ""}
-          </span>
+          <Fragment key={i}>
+            <span className={`word ${isHl ? "hl" : ""}`} style={{ "--w": i / total } as CSSProperties}>{w}</span>
+            {i < total - 1 ? " " : ""}
+          </Fragment>
         );
       })}
     </p>

@@ -101,7 +101,7 @@ export function LivePhone() {
 
   return (
     <div className="relative mx-auto w-[min(21rem,82vw)]" onPointerEnter={() => pause(true)} onPointerLeave={() => pause(false)}>
-      <RadarScope className="left-1/2 top-1/2 w-[175%] -translate-x-1/2 -translate-y-1/2" />
+      <RadarScope labels={false} className="left-1/2 top-1/2 w-[175%] -translate-x-1/2 -translate-y-1/2" />
 
       {s.chips.map((c, i) => {
         const on = i < 3 ? flagOn(i) : showVerdict;

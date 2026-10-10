@@ -31,6 +31,7 @@
 }
 
 html { font-size: 17px; -webkit-text-size-adjust: 100%; scroll-behavior: smooth; color-scheme: dark; }
+html, body { overflow-x: clip; } /* safety net: decorative glows never cause sideways scroll; clip keeps sticky working */
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 body {
   background: var(--color-paper);
@@ -39,6 +40,8 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
+h1, h2, h3 { text-wrap: balance; }
+p, li { text-wrap: pretty; }
 :focus-visible { outline: 2px solid var(--color-cyan); outline-offset: 3px; border-radius: 8px; }
 ::selection { background: rgb(255 75 62 / 0.35); color: #fff; }
 a, button, label[for], [role="tab"], summary { cursor: pointer; }
@@ -329,7 +332,7 @@ body::after {
   @supports ((animation-timeline: view()) and (animation-range: entry)) {
     .word-reveal { view-timeline: --wr block; }
     .word-reveal .word {
-      display: inline-block; white-space: pre;
+      display: inline-block; 
       animation: word-in linear both; animation-timeline: --wr;
       animation-range: entry calc(55% + var(--w) * 40%) cover calc(42% + var(--w) * 22%);
     }
