@@ -60,19 +60,19 @@ export function Trainer({ seed, language }: { seed?: Tactic[]; language: string 
   const falseTaps = parsed ? [...picked].filter((i) => parsed.owner[i] === -1).length : 0;
 
   return (
-    <section id="practice" className="scroll-mt-20 bg-night py-24 text-white">
-      <div className="mx-auto grid max-w-6xl gap-12 px-4 sm:px-6 lg:grid-cols-[minmax(0,22rem)_1fr]">
+    <section id="practice" className="relative scroll-mt-20 border-y hairline bg-night py-24 text-white">
+      <div className="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-[minmax(0,22rem)_1fr]">
         <div className="reveal">
-          <h2 className="text-4xl font-bold leading-tight sm:text-5xl">Train your eye</h2>
-          <p className="mt-4 text-lg text-white/75">
+          <h2 className="text-4xl font-semibold leading-tight tracking-tight sm:text-5xl"><span className="text-gradient">Train your eye</span></h2>
+          <p className="mt-4 text-lg text-ink-soft">
             Spotting a scam is a skill. Researchers found that practising on a harmless, weakened example of a manipulation
             trick helps people resist it later, even when the real one is worded differently. They call it a
             psychological vaccine.
           </p>
-          <p className="mt-4 text-white/75">
+          <p className="mt-4 text-ink-soft">
             Tap the words you think are the trap. Then check your answers.
           </p>
-          <p className="mt-6 text-sm text-white/55">
+          <p className="mt-6 text-sm text-ink-soft">
             Based on{" "}
             <a className="underline hover:text-white" href={CITATIONS.inoculation.url} target="_blank" rel="noreferrer">{CITATIONS.inoculation.label}</a>{" "}
             and{" "}
@@ -81,7 +81,7 @@ export function Trainer({ seed, language }: { seed?: Tactic[]; language: string 
           </p>
           <button
             onClick={newDrill} disabled={loading}
-            className="mt-8 rounded-2xl bg-red px-6 py-3.5 text-lg font-bold text-white transition hover:brightness-110 disabled:opacity-60"
+            className="btn-primary mt-8 rounded-2xl px-6 py-3.5 text-lg disabled:opacity-60"
           >
             {loading ? "Writing a practice message…" : drill ? "Give me another one" : seed?.length ? "Practise the tricks you just saw" : "Give me a practice message"}
           </button>
@@ -90,11 +90,11 @@ export function Trainer({ seed, language }: { seed?: Tactic[]; language: string 
 
         <div className="reveal">
           {!drill ? (
-            <div className="flex h-full min-h-[18rem] items-center justify-center rounded-3xl border-2 border-dashed border-white/20 p-8 text-center text-white/60">
+            <div className="flex h-full min-h-[18rem] items-center justify-center rounded-3xl border-2 border-dashed border-white/20 p-8 text-center text-ink-soft">
               <p className="max-w-sm text-lg">A made-up practice message will appear here. Nothing in it is real.</p>
             </div>
           ) : (
-            <div className="rounded-3xl bg-white p-6 text-ink shadow-2xl sm:p-8">
+            <div className="card p-6 text-ink sm:p-8">
               <div className="flex items-center justify-between gap-3">
                 <span className="rounded-full bg-amber-wash px-3 py-1 text-sm font-bold text-amber">Practice message · made up</span>
                 {revealed && (
@@ -115,7 +115,7 @@ export function Trainer({ seed, language }: { seed?: Tactic[]; language: string 
                       disabled={revealed}
                       onClick={() => setPicked((p) => { const n = new Set(p); if (n.has(i)) n.delete(i); else n.add(i); return n; })}
                       aria-pressed={on}
-                      className={`rounded px-0.5 transition-colors ${on ? "bg-ink text-white" : "hover:bg-paper"} ${revealMark ? "pen-mark" : ""} ${revealed && on && owner === -1 ? "line-through decoration-ink-soft" : ""}`}
+                      className={`rounded px-0.5 transition-colors ${on ? "bg-white text-night" : "hover:bg-white/10"} ${revealMark ? "pen-mark" : ""} ${revealed && on && owner === -1 ? "line-through decoration-ink-soft" : ""}`}
                     >
                       {tok.s}
                       {revealMark && parsed!.owner[i + 2] !== owner && parsed!.owner[i + 1] !== owner && <span className="pen-num">{owner + 1}</span>}
@@ -124,16 +124,16 @@ export function Trainer({ seed, language }: { seed?: Tactic[]; language: string 
                 })}
               </p>
               {!revealed ? (
-                <button onClick={() => setRevealed(true)} disabled={!picked.size} className="mt-6 rounded-2xl bg-ink px-6 py-3 font-bold text-white disabled:opacity-40">
+                <button onClick={() => setRevealed(true)} disabled={!picked.size} className="mt-6 rounded-2xl bg-white px-6 py-3 font-semibold text-night transition hover:bg-white/90 disabled:opacity-40">
                   Check my answers
                 </button>
               ) : (
-                <ol className="mt-6 space-y-4 border-t-2 border-rule pt-5">
+                <ol className="mt-6 space-y-4 border-t hairline pt-5">
                   {drill.tricks.map((t, i) => (
                     <li key={i} className="flex gap-3">
                       <span className="font-pen text-3xl font-bold leading-none text-red">{i + 1}</span>
                       <div>
-                        <p className="font-bold">
+                        <p className="font-semibold text-white">
                           {caught[i] ? "✓ You caught it" : findable[i] ? "✗ Missed" : "Hidden trick"}
                           {t.principle && <span className="font-normal text-ink-soft"> · {PRINCIPLES[t.principle].name}</span>}
                         </p>

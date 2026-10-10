@@ -4,7 +4,6 @@ import { useMemo, useRef, useState, type CSSProperties } from "react";
 import { LANGUAGES, type Analysis, type Tactic } from "@/lib/shared";
 import { SAMPLES } from "@/lib/samples";
 import { findMatches } from "@/lib/signals";
-import { CITATIONS } from "@/lib/principles";
 import { Result } from "./Result";
 import { Trainer } from "./Trainer";
 
@@ -143,38 +142,38 @@ export function Checker({ children }: { children?: React.ReactNode }) {
 
   return (
     <>
-      <section id="check" className="mx-auto grid max-w-6xl items-center gap-12 px-4 pb-16 pt-10 sm:px-6 lg:grid-cols-[1fr_minmax(0,27rem)] lg:gap-16 lg:pt-16">
-        {/* Left: pitch */}
-        <div className="hero-in">
-          <h1 className="text-[2.4rem] font-bold leading-[1.06] tracking-tight sm:text-6xl">
-            Got a strange message? We&apos;ll mark every trick in it.
-          </h1>
-          <p className="mt-5 max-w-xl text-xl text-ink-soft">
-            Paste an SMS or WhatsApp, record a suspicious call, or drop a screenshot. Scam Decoder shows how it is trying to
-            fool you, in plain words, in your language.
+      <section id="check" className="relative mx-auto grid max-w-7xl items-center gap-12 px-4 pb-16 pt-12 sm:px-6 lg:grid-cols-[1fr_minmax(0,26rem)] lg:gap-20 lg:pt-20">
+        {/* Left: intro + examples */}
+        <div className="stagger">
+          <p className="glass inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-sm text-ink">
+            <span className="h-1.5 w-1.5 rounded-full bg-green shadow-[0_0_10px_var(--color-green)]" aria-hidden />
+            Rule engine runs on your device · AI explains
           </p>
-          <dl className="mt-8 grid max-w-lg grid-cols-2 gap-6 border-t-2 border-rule pt-6">
-            <div className="flex flex-col">
-              <dt className="text-ink-soft">lost to cyber fraud in India in 2024</dt>
-              <dd className="order-first font-pen text-5xl font-bold text-red">₹22,845 cr</dd>
-            </div>
-            <div className="flex flex-col">
-              <dt className="text-ink-soft">fraud cases reported in 2024</dt>
-              <dd className="order-first font-pen text-5xl font-bold text-ink">36 lakh</dd>
-            </div>
-            <p className="col-span-2 -mt-2 text-sm text-ink-soft">
-              Source: <a className="underline hover:text-ink" href={CITATIONS.mha.url} target="_blank" rel="noreferrer">{CITATIONS.mha.label}</a>
-            </p>
-          </dl>
+          <h1 className="mt-6 text-4xl font-semibold leading-[1.05] tracking-[-0.03em] sm:text-6xl">
+            <span className="text-gradient">Check a message</span>
+          </h1>
+          <p className="mt-5 max-w-xl text-lg text-ink-soft">
+            Paste it into the phone. Red flags light up as you type. Press <b className="text-white">Decode</b> for the full
+            verdict, the tricks it uses, and what to do next.
+          </p>
+          <ul className="mt-8 grid max-w-lg gap-3 text-ink-soft">
+            {[
+              ["Message", "SMS, WhatsApp or email text"],
+              ["Call / voice", "record on speaker, or upload a voice note"],
+              ["Screenshot", "we read the text on your device"],
+            ].map(([a, b]) => (
+              <li key={a} className="flex gap-3"><span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-red" aria-hidden /><span><b className="text-white">{a}</b>: {b}</span></li>
+            ))}
+          </ul>
           <div>
-            <p className="mb-2 mt-8 text-ink-soft">Try a message people in India really receive:</p>
+            <p className="mb-3 mt-10 text-sm font-medium text-ink-soft">Try a message people in India really receive</p>
             <div className="flex flex-wrap gap-2">
               {SAMPLES.map((s) => (
                 <button
                   key={s.label}
                   onClick={() => { setMode("text"); setText(s.text); analyze(s.text, "text"); }}
                   disabled={busy}
-                  className="rounded-full border-2 border-rule bg-white px-3.5 py-1.5 text-[0.95rem] text-ink transition hover:-translate-y-0.5 hover:border-ink disabled:opacity-50"
+                  className="btn-ghost rounded-full px-3.5 py-1.5 text-[0.92rem] disabled:opacity-50"
                 >
                   {s.label}
                 </button>
@@ -184,14 +183,14 @@ export function Checker({ children }: { children?: React.ReactNode }) {
         </div>
 
         {/* Right: the phone */}
-        <div className="phone-in mx-auto w-full max-w-[27rem]">
+        <div className="phone-in mx-auto w-full max-w-[26rem]">
           <div className="phone">
             <div className="phone-screen">
               <div className="phone-notch" aria-hidden />
-              <div className="flex items-center gap-3 border-b border-rule/70 bg-white/80 px-4 pb-3 pt-2 backdrop-blur">
-                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-rule font-bold text-ink-soft" aria-hidden>?</span>
+              <div className="flex items-center gap-3 border-b hairline bg-white/[0.03] px-4 pb-3 pt-2">
+                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 font-bold text-ink-soft" aria-hidden>?</span>
                 <div className="leading-tight">
-                  <p className="font-bold">+91 98XXX XXXXX</p>
+                  <p className="font-semibold text-white">+91 98XXX XXXXX</p>
                   <p className="text-sm text-ink-soft">Not in your contacts</p>
                 </div>
                 {text.trim() && mode === "text" && (
@@ -203,22 +202,22 @@ export function Checker({ children }: { children?: React.ReactNode }) {
 
               <div className="chat-wall h-[17rem] overflow-y-auto px-4 py-5">
                 {mode === "voice" && !text.trim() ? (
-                  <div className="bubble w-fit max-w-[90%] bg-white px-4 py-3 shadow-sm" style={{ "--bubble-bg": "#fff" } as CSSProperties}>
-                    <p className="font-bold">Incoming call · 02:14</p>
+                  <div className="bubble w-fit max-w-[90%] bg-chat px-4 py-3 text-ink" style={{ "--bubble-bg": "var(--color-chat)" } as CSSProperties}>
+                    <p className="font-semibold text-white">Incoming call · 02:14</p>
                     <div className="mt-2 flex h-8 items-end gap-[3px]" aria-hidden>
                       {Array.from({ length: 28 }, (_, i) => (
-                        <span key={i} className={`w-1 rounded-full bg-ink/60 ${recording ? "animate-pulse" : ""}`} style={{ height: `${20 + ((i * 37) % 80)}%` }} />
+                        <span key={i} className={`w-1 rounded-full bg-gradient-to-t from-red to-violet ${recording ? "animate-pulse" : ""}`} style={{ height: `${20 + ((i * 37) % 80)}%` }} />
                       ))}
                     </div>
                     <p className="mt-2 text-sm text-ink-soft">Record the call on speaker, or upload a voice note.</p>
                   </div>
                 ) : mode === "image" && !text.trim() ? (
-                  <div className="bubble w-fit max-w-[90%] bg-white px-4 py-3 shadow-sm" style={{ "--bubble-bg": "#fff" } as CSSProperties}>
-                    <p className="font-bold">Got it as a screenshot?</p>
+                  <div className="bubble w-fit max-w-[90%] bg-chat px-4 py-3 text-ink" style={{ "--bubble-bg": "var(--color-chat)" } as CSSProperties}>
+                    <p className="font-semibold text-white">Got it as a screenshot?</p>
                     <p className="mt-1 text-sm text-ink-soft">Upload it below. The text is read on your phone and never stored.</p>
                   </div>
                 ) : (
-                  <div className={`bubble w-fit max-w-[92%] bg-white px-4 py-3 shadow-sm ${text.trim() ? "" : "opacity-70"}`} style={{ "--bubble-bg": "#fff" } as CSSProperties}>
+                  <div className={`bubble w-fit max-w-[92%] bg-chat px-4 py-3 text-ink ${text.trim() ? "" : "opacity-80"}`} style={{ "--bubble-bg": "var(--color-chat)" } as CSSProperties}>
                     {!text.trim() && <p className="mb-1 font-pen text-lg text-red">Example: red flags light up as you type</p>}
                     <p className="whitespace-pre-wrap break-words text-[1.02rem] leading-[1.9]"><Live text={preview} /></p>
                   </div>
@@ -226,13 +225,13 @@ export function Checker({ children }: { children?: React.ReactNode }) {
               </div>
 
               {/* Compose */}
-              <div className="border-t border-rule/70 bg-white p-3">
-                <div role="tablist" aria-label="How did you get it?" className="mb-3 grid grid-cols-3 gap-1 rounded-xl bg-paper p-1 text-[0.95rem]">
+              <div className="border-t hairline bg-sheet p-3">
+                <div role="tablist" aria-label="How did you get it?" className="mb-3 grid grid-cols-3 gap-1 rounded-xl bg-white/[0.05] p-1 text-[0.92rem]">
                   {([["text", "Message"], ["voice", "Call / voice"], ["image", "Screenshot"]] as const).map(([m, label]) => (
                     <button
                       key={m} role="tab" aria-selected={mode === m}
                       onClick={() => { setMode(m); setError(""); }}
-                      className={`rounded-lg px-2 py-1.5 font-bold transition ${mode === m ? "bg-white text-ink shadow-sm" : "text-ink-soft hover:text-ink"}`}
+                      className={`rounded-lg px-2 py-1.5 font-bold transition ${mode === m ? "bg-white/[0.14] text-white" : "text-ink-soft hover:text-white"}`}
                     >
                       {label}
                     </button>
@@ -247,11 +246,11 @@ export function Checker({ children }: { children?: React.ReactNode }) {
                       onChange={(e) => setText(e.target.value)}
                       onKeyDown={(e) => { if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) analyze(text, "text"); }}
                       placeholder="Paste the message here…"
-                      className="min-h-[3.2rem] flex-1 resize-none rounded-2xl border-2 border-rule bg-paper/60 px-3.5 py-2.5 text-base leading-snug outline-none focus:border-ink"
+                      className="min-h-[3.2rem] flex-1 resize-none rounded-2xl border border-white/12 bg-white/[0.05] px-3.5 py-2.5 text-base leading-snug text-ink outline-none placeholder:text-ink-soft focus:border-white/40"
                     />
                     <button
                       onClick={() => analyze(text, "text")} disabled={busy}
-                      className="h-[3.2rem] shrink-0 rounded-2xl bg-red px-5 font-bold text-white transition hover:brightness-110 disabled:opacity-60"
+                      className="btn-primary h-[3.2rem] shrink-0 rounded-2xl px-5 disabled:opacity-60"
                     >
                       {busy ? "…" : "Decode"}
                     </button>
@@ -262,11 +261,11 @@ export function Checker({ children }: { children?: React.ReactNode }) {
                   <div className="flex flex-wrap gap-2">
                     <button
                       onClick={toggleRecording} disabled={busy}
-                      className={`flex-1 rounded-2xl px-4 py-3 font-bold text-white transition disabled:opacity-60 ${recording ? "bg-ink" : "bg-red hover:brightness-110"}`}
+                      className={`flex-1 rounded-2xl px-4 py-3 font-bold text-white transition disabled:opacity-60 ${recording ? "bg-white !text-night" : "btn-primary"}`}
                     >
                       {recording ? "■ Stop and decode" : "● Record the call"}
                     </button>
-                    <label className={`flex-1 cursor-pointer rounded-2xl border-2 border-ink px-4 py-3 text-center font-bold ${busy ? "pointer-events-none opacity-60" : ""}`}>
+                    <label className={`btn-ghost flex-1 cursor-pointer rounded-2xl px-4 py-3 text-center font-bold ${busy ? "pointer-events-none opacity-60" : ""}`}>
                       Upload voice note
                       <input type="file" accept="audio/*,.ogg,.opus,.m4a,.mp3,.wav,.webm" className="sr-only" onChange={(e) => e.target.files?.[0] && transcribe(e.target.files[0])} />
                     </label>
@@ -274,7 +273,7 @@ export function Checker({ children }: { children?: React.ReactNode }) {
                 )}
 
                 {mode === "image" && (
-                  <label className={`block cursor-pointer rounded-2xl border-2 border-dashed border-ink/50 px-4 py-4 text-center font-bold hover:border-ink ${busy ? "pointer-events-none opacity-60" : ""}`}>
+                  <label className={`block cursor-pointer rounded-2xl border-2 border-dashed border-white/25 px-4 py-4 text-center font-bold text-white hover:border-white/50 ${busy ? "pointer-events-none opacity-60" : ""}`}>
                     Choose a screenshot
                     <span className="block text-sm font-normal text-ink-soft">English and Hindi text</span>
                     <input type="file" accept="image/*" className="sr-only" onChange={(e) => e.target.files?.[0] && readImage(e.target.files[0])} />
@@ -285,8 +284,8 @@ export function Checker({ children }: { children?: React.ReactNode }) {
           </div>
 
           <div className="mt-4 flex items-center justify-center gap-2">
-            <label htmlFor="lang" className="text-ink-soft">Explain in</label>
-            <select id="lang" value={language} onChange={(e) => setLanguage(e.target.value)} className="rounded-xl border-2 border-rule bg-white px-3 py-1.5 font-bold">
+            <label htmlFor="lang" className="text-sm text-ink-soft">Explain in</label>
+            <select id="lang" value={language} onChange={(e) => setLanguage(e.target.value)} className="rounded-xl border border-white/12 bg-sheet px-3 py-1.5 font-semibold text-ink">
               {LANGUAGES.map((l) => <option key={l}>{l}</option>)}
             </select>
           </div>
@@ -294,16 +293,16 @@ export function Checker({ children }: { children?: React.ReactNode }) {
       </section>
 
       {/* Progress + errors + result */}
-      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
         {error && <p role="alert" className="mb-8 rounded-2xl bg-red-wash px-4 py-3 font-bold text-red">{error}</p>}
 
         {busy && (
-          <ol className="result-in mb-12 max-w-xl space-y-3 rounded-2xl bg-white p-5 shadow-[0_20px_40px_-28px_rgba(27,42,74,0.45)]" aria-live="polite">
+          <ol className="card result-in mb-12 max-w-xl space-y-3 p-5" aria-live="polite">
             {steps.map((s) => {
               const st = stateOf(s.id);
               return (
                 <li key={s.label} className={`flex items-center gap-3 ${st === "todo" ? "text-ink-soft/60" : ""}`}>
-                  <span className={`step-dot h-3 w-3 rounded-full ${st === "done" ? "bg-green" : st === "running" ? "running bg-red" : "bg-rule"}`} aria-hidden />
+                  <span className={`step-dot h-3 w-3 rounded-full ${st === "done" ? "bg-green" : st === "running" ? "running bg-red" : "bg-white/15"}`} aria-hidden />
                   <span className={st === "running" ? "font-bold" : ""}>{s.label}</span>
                   {st === "done" && <span className="font-pen text-xl text-green">done</span>}
                 </li>

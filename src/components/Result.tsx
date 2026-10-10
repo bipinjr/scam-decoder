@@ -37,6 +37,63 @@ function markUp(text: string, quotes: string[]) {
   return out;
 }
 
+const STATES = ["Andhra Pradesh","Assam","Bihar","Chhattisgarh","Delhi","Goa","Gujarat","Haryana","Himachal Pradesh","Jammu & Kashmir","Jharkhand","Karnataka","Kerala","Madhya Pradesh","Maharashtra","Odisha","Punjab","Rajasthan","Tamil Nadu","Telangana","Uttar Pradesh","Uttarakhand","West Bengal","Other"];
+
+function ReportToRadar({ result, text, language, source }: { result: Analysis; text: string; language: string; source: "text" | "voice" | "image" }) {
+  const [channel, setChannel] = useState(source === "voice" ? "call" : "sms");
+  const [state, setState] = useState("");
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  async function send() {
+    setStatus("sending");
+    try {
+      const res = await fetch("/api/report", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          text, language, channel, state: state || undefined,
+          scamType: result.scamType, verdict: result.verdict, risk: result.risk,
+          principles: result.tactics.map((t) => t.principle).filter(Boolean),
+        }),
+      });
+      setStatus(res.ok ? "sent" : "error");
+    } catch {
+      setStatus("error");
+    }
+  }
+  if (status === "sent")
+    return (
+      <p className="card mt-6 flex flex-wrap items-center gap-3 px-5 py-4 text-ink" role="status">
+        <span className="h-2 w-2 rounded-full bg-green shadow-[0_0_10px_var(--color-green)]" aria-hidden />
+        Reported. Thank you, this now warns others on the <a href="/radar" className="font-semibold text-white underline underline-offset-4">Scam Radar</a>.
+      </p>
+    );
+  return (
+    <div className="card mt-6 flex flex-wrap items-end gap-3 px-5 py-4">
+      <div className="mr-auto">
+        <p className="font-semibold text-white">Warn everyone: add it to the Scam Radar</p>
+        <p className="text-sm text-ink-soft">Phone numbers, OTPs and account numbers are removed before saving.</p>
+      </div>
+      <label className="text-sm text-ink-soft">
+        Came by
+        <select value={channel} onChange={(e) => setChannel(e.target.value)} className="mt-1 block rounded-lg border border-white/12 bg-sheet px-2.5 py-2 text-ink">
+          <option value="sms">SMS</option><option value="whatsapp">WhatsApp</option><option value="call">Phone call</option><option value="email">Email</option><option value="other">Other</option>
+        </select>
+      </label>
+      <label className="text-sm text-ink-soft">
+        Your state (optional)
+        <select value={state} onChange={(e) => setState(e.target.value)} className="mt-1 block rounded-lg border border-white/12 bg-sheet px-2.5 py-2 text-ink">
+          <option value="">Prefer not to say</option>
+          {STATES.map((s) => <option key={s}>{s}</option>)}
+        </select>
+      </label>
+      <button onClick={send} disabled={status === "sending"} className="btn-primary rounded-xl px-5 py-2.5 disabled:opacity-60">
+        {status === "sending" ? "Reporting…" : "Report to Scam Radar"}
+      </button>
+      {status === "error" && <p role="alert" className="w-full text-sm font-semibold text-red">The report did not go through. Try again.</p>}
+    </div>
+  );
+}
+
 export function Result({
   result, text, language, source, onPractice,
 }: {
@@ -74,7 +131,7 @@ export function Result({
     <div className="result-in" style={{ "--pen": v.pen } as CSSProperties}>
       {/* Verdict */}
       <section className="flex flex-wrap items-center gap-x-8 gap-y-5">
-        <div className="stamp bg-white/40 px-5 py-2 text-3xl font-bold uppercase sm:text-4xl" style={{ color: v.pen }}>
+        <div className="stamp px-5 py-2 text-3xl font-bold uppercase sm:text-4xl" style={{ color: v.pen }}>
           {v.stamp}
         </div>
         <div className="flex items-center gap-3" style={{ color: v.pen }}>
@@ -88,41 +145,43 @@ export function Result({
         </p>
       </section>
 
-      <p className="mt-6 max-w-3xl text-2xl font-bold leading-snug sm:text-[1.7rem]">{result.summary}</p>
+      <p className="mt-7 max-w-3xl text-2xl font-semibold leading-snug text-white sm:text-[1.75rem]">{result.summary}</p>
       {result.whatTheyWant && (
         <p className="mt-2 max-w-3xl text-lg"><span className="text-ink-soft">What they&apos;re after: </span>{result.whatTheyWant}</p>
       )}
 
       <div className="mt-6 flex flex-wrap gap-3">
         {result.verdict !== "likely_safe" && (
-          <a href="tel:1930" className="rounded-2xl px-5 py-3 font-bold text-white shadow-sm transition-transform hover:-translate-y-0.5" style={{ background: v.pen }}>
+          <a href="tel:1930" className="btn-primary rounded-2xl px-5 py-3">
             Lost money? Call 1930 now
           </a>
         )}
         <a
           href={`https://wa.me/?text=${share}`} target="_blank" rel="noreferrer"
-          className="rounded-2xl bg-[#1f7a4d] px-5 py-3 font-bold text-white shadow-sm transition-transform hover:-translate-y-0.5"
+          className="rounded-2xl bg-[#1f7a4d] px-5 py-3 font-semibold text-white transition hover:-translate-y-0.5 hover:bg-[#23895a]"
         >
           Warn my family on WhatsApp
         </a>
-        <button onClick={speak} aria-pressed={speaking} className="rounded-2xl border-2 border-ink bg-white px-5 py-3 font-bold transition-transform hover:-translate-y-0.5">
+        <button onClick={speak} aria-pressed={speaking} className="btn-ghost rounded-2xl px-5 py-3 font-semibold">
           {speaking ? "Stop reading" : "Read this to me"}
         </button>
         {result.tactics.length > 0 && (
-          <button onClick={onPractice} className="rounded-2xl border-2 border-dashed border-ink/50 bg-transparent px-5 py-3 font-bold transition-transform hover:-translate-y-0.5">
+          <button onClick={onPractice} className="rounded-2xl border border-dashed border-white/30 px-5 py-3 font-semibold text-ink transition hover:-translate-y-0.5 hover:border-white/60">
             Practise spotting these tricks
           </button>
         )}
       </div>
 
+      {result.verdict !== "likely_safe" && <ReportToRadar result={result} text={text} language={language} source={source} />}
+
       {/* Marked-up message */}
       {result.tactics.length > 0 && (
         <section className="mt-12 grid gap-8 lg:grid-cols-[minmax(0,1fr)_21rem]" aria-label="The message, marked up">
-          <div className="ruled self-start rounded-2xl py-6 pl-14 pr-5 shadow-[0_1px_0_var(--color-rule),0_20px_40px_-24px_rgba(27,42,74,0.4)] sm:pr-8 lg:sticky lg:top-24">
-            <p className="mb-3 -ml-1 font-pen text-xl text-ink-soft">
+          <div className="ruled self-start rounded-2xl py-6 pl-14 pr-5 shadow-[0_30px_80px_-30px_rgba(0,0,0,0.8),0_0_60px_-20px_rgba(255,75,62,0.35)] sm:pr-8 lg:sticky lg:top-24">
+            <p className="mb-3 -ml-1 font-pen text-xl text-[#52607a]">
               {source === "voice" ? "What the caller said" : source === "image" ? "Text from your screenshot" : "The message you received"}
             </p>
-            <div className="bubble max-w-xl bg-chat px-4 py-3" style={{ "--bubble-bg": "var(--color-chat)" } as CSSProperties}>
+            <div className="bubble max-w-xl bg-page-bubble px-4 py-3" style={{ "--bubble-bg": "var(--color-page-bubble)" } as CSSProperties}>
               <p className="whitespace-pre-wrap text-lg leading-[2]">
                 {segments.map((seg, i) =>
                   seg.n === undefined ? (
@@ -148,8 +207,8 @@ export function Result({
                     {t.explanation && <p className="mt-1 text-ink-soft">{t.explanation}</p>}
                     {p && (
                       <a
-                        href="#science"
-                        className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-rule bg-white px-2.5 py-0.5 text-sm text-ink hover:border-ink"
+                        href="/learn"
+                        className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/[0.05] px-2.5 py-0.5 text-sm text-ink hover:border-white/40"
                         title={p.long}
                       >
                         <span className="h-1.5 w-1.5 rounded-full" style={{ background: v.pen }} aria-hidden />
@@ -167,7 +226,7 @@ export function Result({
       <div className="mt-14 grid gap-10 md:grid-cols-2">
         {result.safeActions.length > 0 && (
           <section>
-            <h3 className="text-xl font-bold">What to do now</h3>
+            <h3 className="text-xl font-semibold text-white">What to do now</h3>
             <ul className="mt-3 space-y-3">
               {result.safeActions.map((a, i) => (
                 <li key={i} className="flex gap-3 text-lg">
@@ -185,14 +244,14 @@ export function Result({
           </section>
         )}
         {result.lesson && (
-          <section className="relative rounded-2xl bg-white p-6 shadow-[0_20px_40px_-28px_rgba(27,42,74,0.45)]">
-            <h3 className="text-xl font-bold">Remember this for next time</h3>
+          <section className="card relative p-6">
+            <h3 className="text-xl font-semibold text-white">Remember this for next time</h3>
             <p className={`${handwritten} mt-3 text-[1.9rem] leading-snug`} style={{ color: v.pen }}>{result.lesson}</p>
           </section>
         )}
       </div>
 
-      <details className="mt-12 border-t-2 border-rule pt-5">
+      <details className="mt-12 border-t hairline pt-5">
         <summary className="cursor-pointer font-bold text-ink-soft hover:text-ink">How we checked this message</summary>
         <p className="mt-3 max-w-3xl text-ink-soft">
           Two separate checks. A rule engine looks for hard evidence like fake bank links, hidden short links, requests for
@@ -203,8 +262,8 @@ export function Result({
           {([["AI reading", result.aiScore], ["Rule engine", result.ruleScore]] as const).map(([label, n]) => (
             <div key={label} className="grid grid-cols-[8rem_1fr_2.5rem] items-center gap-3">
               <span>{label}</span>
-              <span className="h-2.5 overflow-hidden rounded-full bg-rule">
-                <span className="block h-full rounded-full bg-ink" style={{ width: `${n ?? 0}%` }} />
+              <span className="h-2.5 overflow-hidden rounded-full bg-white/10">
+                <span className="block h-full rounded-full bg-gradient-to-r from-red to-violet" style={{ width: `${n ?? 0}%` }} />
               </span>
               <span className="text-right font-bold">{n ?? "–"}</span>
             </div>
