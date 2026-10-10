@@ -4,6 +4,8 @@
 
 HackNowa Global Hackathon 2026 · Problem statement: **Digital Safety & Cybersecurity**
 
+**Live:** https://scam-decoder-z8ch.vercel.app
+
 ---
 
 ## The problem
