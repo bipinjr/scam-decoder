@@ -1,0 +1,79 @@
+@import "tailwindcss";
+
+@theme {
+  --font-body: var(--font-body), "Noto Sans", system-ui, sans-serif;
+  --font-pen: var(--font-pen), "Segoe Print", cursive;
+
+  --color-paper: #eef2f7;
+  --color-sheet: #ffffff;
+  --color-ink: #1b2a4a;
+  --color-ink-soft: #52607a;
+  --color-rule: #c9d6e6;
+  --color-red: #d4231b;
+  --color-red-wash: #fbe8e6;
+  --color-amber: #b86a00;
+  --color-amber-wash: #fcf0dc;
+  --color-green: #1f7a4d;
+  --color-green-wash: #e3f2ea;
+  --color-chat: #dfe7f0;
+}
+
+html { font-size: 18px; -webkit-text-size-adjust: 100%; }
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  line-height: 1.55;
+}
+:focus-visible { outline: 3px solid #2457d6; outline-offset: 2px; border-radius: 6px; }
+
+/* Exam-sheet ruled lines with a red margin line, used only behind the marked-up message */
+.ruled {
+  background-color: var(--color-sheet);
+  background-image:
+    linear-gradient(90deg, transparent 2.6rem, rgba(212, 35, 27, 0.35) 2.6rem, rgba(212, 35, 27, 0.35) calc(2.6rem + 1.5px), transparent calc(2.6rem + 1.5px)),
+    repeating-linear-gradient(180deg, transparent 0, transparent calc(2rem - 1px), var(--color-rule) calc(2rem - 1px), var(--color-rule) 2rem);
+}
+
+/* Chat bubble with a tail, like an incoming SMS / WhatsApp message */
+.bubble { position: relative; border-radius: 4px 18px 18px 18px; }
+.bubble::before {
+  content: ""; position: absolute; left: -9px; top: 0;
+  border-width: 0 10px 12px 0; border-style: solid;
+  border-color: transparent var(--bubble-bg, #fff) transparent transparent;
+}
+
+/* Red-pen underline that draws itself */
+.pen-mark {
+  --pen: var(--color-red);
+  background-image: linear-gradient(var(--pen), var(--pen));
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 100% 2.5px;
+  padding-bottom: 2px;
+  border-radius: 2px;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+.pen-num {
+  font-family: var(--font-pen); font-weight: 700; color: var(--pen, var(--color-red));
+  font-size: 1.15em; line-height: 0; vertical-align: super; margin-left: 1px;
+}
+
+/* Hand-drawn circle for the score */
+.grade-ring { border: 3px solid currentColor; border-radius: 52% 46% 55% 44% / 48% 55% 45% 52%; transform: rotate(-4deg); }
+
+/* Rubber stamp */
+.stamp {
+  border: 4px double currentColor; border-radius: 8px; letter-spacing: 0.08em;
+  transform: rotate(-7deg); mix-blend-mode: multiply;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .pen-mark { animation: pen-draw 0.55s cubic-bezier(.6, .1, .3, 1) both; animation-delay: calc(var(--i, 0) * 0.35s + 0.5s); }
+  .pen-note { animation: ink-in 0.4s ease-out both; animation-delay: calc(var(--i, 0) * 0.35s + 0.7s); }
+  .stamp { animation: stamp-in 0.32s cubic-bezier(.2, 1.6, .4, 1) both; animation-delay: 0.15s; }
+  @keyframes pen-draw { from { background-size: 0% 2.5px; } }
+  @keyframes ink-in { from { opacity: 0; transform: translateX(-4px); } }
+  @keyframes stamp-in { from { opacity: 0; transform: rotate(-7deg) scale(1.9); } }
+}
