@@ -17,7 +17,7 @@ export function Nav() {
   const [open, setOpen] = useState(false);
   return (
     <header className="sticky top-0 z-40 border-b hairline bg-[#060a13]/85 backdrop-blur-xl backdrop-saturate-150">
-      <div className="scroll-progress absolute inset-x-0 bottom-[-1px] h-[2px] bg-gradient-to-r from-red via-[#ff3b5c] to-violet" aria-hidden />
+      <div className="scroll-progress absolute inset-x-0 bottom-[-1px] h-[2px] bg-red" aria-hidden />
       <nav className="mx-auto flex h-16 max-w-7xl items-center gap-8 px-4 sm:px-6" aria-label="Main">
         <Link href="/" aria-label="Scam Decoder home" onClick={() => setOpen(false)}><Logo /></Link>
         <ul className="hidden items-center gap-1 lg:flex">

@@ -91,7 +91,7 @@ export function Dissection() {
               ref={(el) => { steps.current[i] = el; }}
               className={`card p-7 transition-all duration-500 ${active === i ? "border-red/50 opacity-100 shadow-[0_0_60px_-20px_rgba(255,75,62,.6)]" : "opacity-40"}`}
             >
-              <p className="font-mono text-sm text-red">Trick {i + 1} · {PRINCIPLES[s.p].name}</p>
+              <p className="flex items-center gap-3"><span className="font-pen text-3xl font-bold leading-none text-red">{i + 1}</span><span className="rounded-full border border-red/40 px-2.5 py-0.5 text-sm text-[#ffb4ad]">Lever: {PRINCIPLES[s.p].name}</span></p>
               <h3 className="mt-2 text-2xl font-semibold text-white">{s.title}</h3>
               <p className="mt-3 text-lg text-ink-soft">{s.body}</p>
             </li>

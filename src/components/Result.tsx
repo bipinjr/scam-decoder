@@ -266,7 +266,7 @@ export function Result({
             <div key={label} className="grid grid-cols-[8rem_1fr_2.5rem] items-center gap-3">
               <span>{label}</span>
               <span className="h-2.5 overflow-hidden rounded-full bg-white/10">
-                <span className="block h-full rounded-full bg-gradient-to-r from-red to-violet" style={{ width: `${n ?? 0}%` }} />
+                <span className="block h-full rounded-full bg-red" style={{ width: `${n ?? 0}%` }} />
               </span>
               <span className="text-right font-bold">{n ?? "–"}</span>
             </div>

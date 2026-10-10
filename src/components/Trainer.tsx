@@ -125,7 +125,7 @@ export function Trainer({ seed, language }: { seed?: Tactic[]; language: string 
               </div>
               <p key={RANKS[rankIdx].name} className="pop mt-1 font-pen text-4xl font-bold text-red">{RANKS[rankIdx].name}</p>
               <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/10">
-                <div className="rank-bar h-full rounded-full bg-gradient-to-r from-red via-[#ff3b5c] to-violet" style={{ transform: `scaleX(${Math.min(1, progress)})` }} />
+                <div className="rank-bar h-full rounded-full bg-red" style={{ transform: `scaleX(${Math.min(1, progress)})` }} />
               </div>
               <p className="mt-2 text-sm text-ink-soft">
                 {stats.caught} tricks caught in {stats.rounds} round{stats.rounds > 1 ? "s" : ""}

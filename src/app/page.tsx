@@ -26,7 +26,7 @@ const FEATURES = [
     art: (
       <div className="flex h-12 items-end gap-[3px]" aria-hidden>
         {Array.from({ length: 30 }, (_, i) => (
-          <span key={i} className="col-grow w-1.5 rounded-full bg-gradient-to-t from-red to-violet" style={{ height: `${18 + ((i * 41) % 82)}%`, "--i": i } as CSSProperties} />
+          <span key={i} className="col-grow w-1.5 rounded-full bg-red" style={{ height: `${18 + ((i * 41) % 82)}%`, "--i": i } as CSSProperties} />
         ))}
       </div>
     ),
@@ -45,7 +45,7 @@ const FEATURES = [
         {([["Fake bank KYC", 92], ["Task job scam", 78], ["Digital arrest", 66], ["Electricity cut-off", 48]] as const).map(([l, w], i) => (
           <div key={l} className="flex items-center gap-3 text-xs text-ink-soft">
             <span className="w-32 shrink-0">{l}</span>
-            <span className="bar-grow h-2 rounded-full bg-gradient-to-r from-red to-violet" style={{ width: `${w}%`, "--i": i } as CSSProperties} />
+            <span className="bar-grow h-2 rounded-full bg-red" style={{ width: `${w}%`, "--i": i } as CSSProperties} />
           </div>
         ))}
       </div>
@@ -81,13 +81,19 @@ export default function Home() {
         <CursorLight />
         <div className="hero-parallax relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-16 px-4 pb-20 pt-16 sm:px-6 lg:grid-cols-[1.1fr_1fr] lg:pb-28 lg:pt-24">
           <div className="stagger">
-            <p className="glass inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-sm text-ink">
-              <span className="h-1.5 w-1.5 rounded-full bg-green shadow-[0_0_10px_var(--color-green)]" aria-hidden />
-              Research-backed · 9 Indian languages · free
-            </p>
+            <p className="claim-stamp">Tested on 40 unseen scams</p>
             <h1 className="mt-6 text-[2.7rem] font-semibold leading-[1.04] tracking-[-0.035em] sm:text-7xl">
-              <span className="text-gradient"><DecodeText text="Stop the scam" /></span><br />
-              <span className="text-threat"><DecodeText text="before it stops you." delay={300} duration={1300} /></span>
+              <span className="text-white">
+                <DecodeText text="Stop the " />
+                <span className="circled">
+                  <DecodeText text="scam" delay={150} />
+                  <svg viewBox="0 0 120 60" preserveAspectRatio="none" aria-hidden>
+                    <path pathLength={1} d="M14 34 C 10 12, 52 4, 86 8 S 120 26, 108 44 S 52 60, 24 50 S 4 28, 30 14" vectorEffect="non-scaling-stroke" />
+                  </svg>
+                </span>
+              </span>
+              <br />
+              <span className="text-red"><DecodeText text="before it stops you." delay={300} duration={1300} /></span>
             </h1>
             <p className="mt-6 max-w-xl text-lg text-ink-soft sm:text-xl">
               Paste a message, record a call or drop a screenshot. Scam Decoder shows every trick it uses to fool you, in plain
@@ -137,7 +143,7 @@ export default function Home() {
       {/* Features */}
       <section className="mx-auto max-w-7xl px-4 sm:px-6">
         <h2 className="reveal max-w-2xl text-4xl font-semibold tracking-tight sm:text-5xl">
-          <span className="text-gradient">One app for every way a scam reaches you</span>
+          <span className="text-gradient">However the scam reaches you, it gets checked</span>
         </h2>
         <SpotlightGroup className="mt-12 grid gap-4 md:grid-cols-3">
           {FEATURES.map((f) => (
@@ -163,12 +169,12 @@ export default function Home() {
         </div>
         <ol className="steps-track relative space-y-16 pl-16">
           <svg className="absolute left-[1.15rem] top-2 h-[calc(100%-1rem)] w-6 overflow-visible" viewBox="0 0 24 100" preserveAspectRatio="none" aria-hidden>
-            <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#ff4b3e" /><stop offset="1" stopColor="#7c5cff" /></linearGradient></defs>
+            <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#ff4b3e" /><stop offset="1" stopColor="#ff8f86" /></linearGradient></defs>
             <path className="pen-path" pathLength={1} d="M12 0 C 2 12, 22 22, 12 34 S 2 56, 12 67 S 22 88, 12 100" fill="none" stroke="url(#g)" strokeWidth="2.5" strokeLinecap="round" vectorEffect="non-scaling-stroke" />
           </svg>
           {STEPS.map((s, i) => (
             <li key={s.title} className="reveal relative">
-              <span className="glow-red absolute -left-16 top-0 grid h-10 w-10 place-items-center rounded-full bg-paper font-mono text-sm font-semibold text-red">0{i + 1}</span>
+              <span className="absolute -left-16 -top-1 grid h-10 w-10 place-items-center rounded-full border-2 border-red bg-paper font-pen text-2xl font-bold text-red">{i + 1}</span>
               <h3 className="text-2xl font-semibold text-white">{s.title}</h3>
               <p className="mt-2 max-w-2xl text-lg text-ink-soft">{s.body}</p>
             </li>
