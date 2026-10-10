@@ -46,7 +46,7 @@ export default function ResearchPage() {
                 ) : (
                   <a href={c.url} target="_blank" rel="noreferrer" className="btn-primary rounded-xl px-4 py-2.5 text-sm">Read the report</a>
                 )}
-                {c.pdf && <a href={c.url} target="_blank" rel="noreferrer" className="text-sm text-ink-soft underline underline-offset-4 hover:text-white">Publisher page</a>}
+                {c.pdf && <a href={c.url} target="_blank" rel="noreferrer" className="inline-block py-2 text-sm text-ink-soft underline underline-offset-4 hover:text-white">Publisher page</a>}
                 <span className="text-xs text-ink-soft">{c.note}</span>
               </div>
             </li>

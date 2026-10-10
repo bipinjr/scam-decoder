@@ -172,10 +172,12 @@ export function LivePhone() {
             aria-selected={i === idx}
             aria-label={`Show the ${sc.app} example`}
             onClick={() => setIdx(i)}
-            className={`h-2.5 rounded-full transition-all duration-300 ${i === idx ? "w-8 bg-red" : "w-2.5 bg-white/25 hover:bg-white/50"}`}
-          />
+            className="group grid h-8 min-w-8 place-items-center px-1"
+          >
+            <span className={`block h-2.5 rounded-full transition-all duration-300 ${i === idx ? "w-8 bg-red" : "w-2.5 bg-white/25 group-hover:bg-white/50"}`} />
+          </button>
         ))}
-        <span className="ml-2 font-mono text-xs text-ink-soft">{paused ? "paused" : SCENARIOS[idx].app}</span>
+        <span className="ml-1 font-mono text-xs text-ink-soft">{paused ? "paused" : SCENARIOS[idx].app}</span>
       </div>
     </div>
   );

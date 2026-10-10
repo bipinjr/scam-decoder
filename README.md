@@ -29,7 +29,7 @@ Spam filters give a yes or no at best. They never tell the person *why*, so the 
 ## Research behind it
 
 - **Stajano & Wilson (2011)**, *Understanding scam victims: seven principles for systems security*, Communications of the ACM 54(3). Every trick Scam Decoder finds is tagged with one of their seven principles: time pressure, obeying authority, need and greed, distraction, kindness, following the crowd, shame and secrecy. [PDF](https://www.cl.cam.ac.uk/techreports/UCAM-CL-TR-754.pdf)
-- **Roozenbeek et al. (2022)**, *Psychological inoculation improves resilience against misinformation on social media*, Science Advances 8(34). Teaching people a manipulation *technique* protects them against new content that uses it. This is why we explain the lever, not just the verdict. [PDF](https://pmc.ncbi.nlm.nih.gov/articles/PMC9401631/pdf/sciadv.abo6254.pdf)
+- **Roozenbeek et al. (2022)**, *Psychological inoculation improves resilience against misinformation on social media*, Science Advances 8(34). Teaching people a manipulation *technique* protects them against new content that uses it. This is why we explain the lever, not just the verdict. [PDF](https://www.science.org/doi/pdf/10.1126/sciadv.abo6254)
 - **Roozenbeek, van der Linden & Nygren (2020)**, *Prebunking interventions based on "inoculation" theory can reduce susceptibility to misinformation across cultures*, HKS Misinformation Review. A weakened, made-up example works as a "vaccine" across languages. This is the basis of practice mode. [PDF](https://misinforeview.hks.harvard.edu/wp-content/uploads/2020/02/FORMATTED_globalvaccination_Jan30.pdf)
 
 These inoculation studies tested misinformation, not scams. We apply the same method to scams; we don't claim it is proven for scams specifically.
