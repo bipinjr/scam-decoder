@@ -130,7 +130,7 @@ export default function Home() {
             { n: <CountUp to={9} />, l: "Indian languages supported" },
           ].map((s, i) => (
             <div key={i} className="reveal bg-paper p-7">
-              <p className="font-mono text-4xl font-semibold text-white">{s.n}</p>
+              <p className="text-4xl font-semibold tabular-nums tracking-tight text-white">{s.n}</p>
               <p className="mt-2 text-ink-soft">{s.l}</p>
             </div>
           ))}

@@ -29,7 +29,7 @@ export default function LearnPage() {
           const p = PRINCIPLES[id];
           return (
             <article key={id} className="spotlight card reveal flex flex-col p-7">
-              <span className="font-mono text-sm text-red">0{i + 1}</span>
+              <span className="font-pen text-3xl font-bold leading-none text-red">{i + 1}</span>
               <h2 className="mt-3 text-2xl font-semibold text-white">{p.name}</h2>
               <p className="mt-3 text-ink-soft">{p.long}</p>
               <p className="mt-auto rounded-xl bg-chat px-4 py-3 pt-3 text-ink">

@@ -135,7 +135,7 @@ export function Dashboard() {
         {kpis.map((k) => (
           <div key={k.label} className="card reveal p-6">
             <p className="text-sm text-ink-soft">{k.label}</p>
-            <p className={`mt-3 font-semibold tracking-tight text-white ${k.small ? "text-2xl" : "font-mono text-4xl"}`}>{k.value}</p>
+            <p className={`mt-3 font-semibold tracking-tight text-white ${k.small ? "text-2xl" : "text-4xl tabular-nums"}`}>{k.value}</p>
           </div>
         ))}
       </div>

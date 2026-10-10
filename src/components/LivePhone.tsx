@@ -124,7 +124,7 @@ export function LivePhone() {
                   <p className="truncate text-sm font-semibold text-white">{s.sender}</p>
                   <p className="text-xs text-ink-soft">{s.sub}</p>
                 </div>
-                <span className={`ml-auto rounded-full px-2.5 py-1 font-mono text-xs font-bold transition-colors duration-300 ${flags ? "bg-red-wash text-red" : "bg-white/[0.06] text-ink-soft"}`}>
+                <span className={`ml-auto shrink-0 whitespace-nowrap rounded-full px-2.5 py-1 font-mono text-xs font-bold transition-colors duration-300 ${flags ? "bg-red-wash text-red" : "bg-white/[0.06] text-ink-soft"}`}>
                   {flags} red flag{flags === 1 ? "" : "s"}
                 </span>
               </div>

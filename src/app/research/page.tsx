@@ -75,7 +75,7 @@ export default function ResearchPage() {
             { v: `${(H.medianMs / 1000).toFixed(1)} s`, l: "median time to a full answer" },
           ].map((k) => (
             <div key={k.l} className="card reveal p-6">
-              <p className="font-mono text-4xl font-semibold text-white">{k.v}</p>
+              <p className="text-4xl font-semibold tabular-nums tracking-tight text-white">{k.v}</p>
               <p className="mt-2 text-sm text-ink-soft">{k.l}</p>
             </div>
           ))}

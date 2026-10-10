@@ -361,3 +361,6 @@ body::after {
 /* Claim stamp (replaces template pill) */
 .claim-stamp { display: inline-block; border: 3px double var(--color-red); color: #ff8f86; border-radius: 6px; padding: .3rem .7rem;
   font-weight: 700; font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; transform: rotate(-2.5deg); }
+
+/* Floating chips need room around the phone: hide them on small screens (this class outranks Tailwind's `hidden`) */
+@media (max-width: 639px) { .chip { display: none !important; } }
