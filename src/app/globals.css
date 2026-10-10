@@ -352,7 +352,7 @@ body::after {
 /* Hand-drawn pen circle around a word */
 .circled { position: relative; display: inline-block; }
 .circled svg { position: absolute; left: -8%; top: -14%; width: 116%; height: 132%; overflow: visible; pointer-events: none; }
-.circled path { stroke: var(--color-red); stroke-width: 3.5; fill: none; stroke-linecap: round; }
+.circled path { stroke: var(--color-red); stroke-width: 2.2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
 @media (prefers-reduced-motion: no-preference) {
   .circled path { stroke-dasharray: 1; stroke-dashoffset: 1; animation: circle-draw .9s cubic-bezier(.6, .1, .3, 1) 1.5s forwards; }
   @keyframes circle-draw { to { stroke-dashoffset: 0; } }

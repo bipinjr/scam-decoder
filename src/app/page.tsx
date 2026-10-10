@@ -88,7 +88,7 @@ export default function Home() {
                 <span className="circled">
                   <DecodeText text="scam" delay={150} />
                   <svg viewBox="0 0 120 60" preserveAspectRatio="none" aria-hidden>
-                    <path pathLength={1} d="M14 34 C 10 12, 52 4, 86 8 S 120 26, 108 44 S 52 60, 24 50 S 4 28, 30 14" vectorEffect="non-scaling-stroke" />
+                    <path pathLength={1} d="M14 34 C 10 12, 52 4, 86 8 S 120 26, 108 44 S 52 60, 24 50 S 4 28, 30 14" />
                   </svg>
                 </span>
               </span>
@@ -170,7 +170,7 @@ export default function Home() {
         <ol className="steps-track relative space-y-16 pl-16">
           <svg className="absolute left-[1.15rem] top-2 h-[calc(100%-1rem)] w-6 overflow-visible" viewBox="0 0 24 100" preserveAspectRatio="none" aria-hidden>
             <defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#ff4b3e" /><stop offset="1" stopColor="#ff8f86" /></linearGradient></defs>
-            <path className="pen-path" pathLength={1} d="M12 0 C 2 12, 22 22, 12 34 S 2 56, 12 67 S 22 88, 12 100" fill="none" stroke="url(#g)" strokeWidth="2.5" strokeLinecap="round" vectorEffect="non-scaling-stroke" />
+            <path className="pen-path" pathLength={1} d="M12 0 C 2 12, 22 22, 12 34 S 2 56, 12 67 S 22 88, 12 100" fill="none" stroke="url(#g)" strokeWidth="2.5" strokeLinecap="round" />
           </svg>
           {STEPS.map((s, i) => (
             <li key={s.title} className="reveal relative">
