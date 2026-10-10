@@ -47,8 +47,8 @@ const SCENARIOS: Scenario[] = [
 
 const CHIP_POS: CSSProperties[] = [
   { top: "22%", left: "-18%" },
-  { top: "47%", right: "-21%" },
-  { bottom: "24%", left: "-14%" },
+  { top: "44%", right: "-36%" },
+  { top: "57%", left: "-24%" },
   { top: "-4%", right: "-6%" },
 ];
 
