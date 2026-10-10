@@ -309,3 +309,32 @@ body::after {
   .pop { animation: pop .5s cubic-bezier(.3, 1.8, .5, 1) both; }
   @keyframes pop { from { transform: scale(.4); opacity: 0; } }
 }
+
+/* Live phone sequence */
+@media (prefers-reduced-motion: no-preference) {
+  .typing-dot { animation: typing 1s ease-in-out infinite; }
+  @keyframes typing { 0%, 60%, 100% { transform: translateY(0); opacity: .5; } 30% { transform: translateY(-5px); opacity: 1; } }
+  .msg-in { animation: msg-in .45s cubic-bezier(.2, 1.2, .4, 1) both; transform-origin: top left; }
+  @keyframes msg-in { from { opacity: 0; transform: translateY(14px) scale(.92); } }
+  .verdict-in { animation: verdict-in .5s cubic-bezier(.2, 1.5, .4, 1) both; }
+  @keyframes verdict-in { from { opacity: 0; transform: translateY(18px) scale(.85); } }
+  .float-y { animation: float-y 6s ease-in-out infinite; }
+  @keyframes float-y { 50% { translate: 0 -12px; } }
+}
+
+/* Word-by-word scroll reveal (two places only) */
+.word-reveal .word { display: inline; }
+.word-reveal .word.hl { color: var(--color-red); background-image: linear-gradient(var(--color-red), var(--color-red)); background-repeat: no-repeat; background-position: 0 92%; background-size: 100% 3px; }
+@media (prefers-reduced-motion: no-preference) {
+  @supports ((animation-timeline: view()) and (animation-range: entry)) {
+    .word-reveal { view-timeline: --wr block; }
+    .word-reveal .word {
+      display: inline-block; white-space: pre;
+      animation: word-in linear both; animation-timeline: --wr;
+      animation-range: entry calc(55% + var(--w) * 40%) cover calc(42% + var(--w) * 22%);
+    }
+    .word-reveal .word.hl { animation-name: word-in, word-ink; }
+    @keyframes word-in { from { opacity: .1; transform: translateY(.45em) scale(.96); filter: blur(5px); } }
+    @keyframes word-ink { from { background-size: 0% 3px; color: #fff; } 60% { color: #fff; } }
+  }
+}

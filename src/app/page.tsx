@@ -1,73 +1,12 @@
 import Link from "next/link";
 import type { CSSProperties } from "react";
-import { CountUp, CursorLight, DecodeText, SpotlightGroup, Tilt } from "@/components/fx";
-import { RadarScope } from "@/components/RadarScope";
+import { CountUp, CursorLight, DecodeText, SpotlightGroup } from "@/components/fx";
+import { LivePhone } from "@/components/LivePhone";
+import { WordReveal } from "@/components/WordReveal";
 import { Dissection } from "@/components/Dissection";
 import { Ticker } from "@/components/Ticker";
 import { CITATIONS } from "@/lib/principles";
 import { BENCHMARK } from "@/lib/benchmark";
-
-const DEMO = [
-  { t: "Dear SBI customer, your YONO account will be " },
-  { t: "BLOCKED today", m: 1 },
-  { t: " due to pending KYC. Update PAN immediately: " },
-  { t: "sbi-kyc-update.xyz", m: 2 },
-  { t: " or " },
-  { t: "share the OTP", m: 3 },
-  { t: " with our officer." },
-];
-
-const CHIPS = [
-  { label: "Fake deadline", style: { top: "20%", left: "-16%" }, d: 0 },
-  { label: "Spoofed SBI link", style: { top: "46%", right: "-20%" }, d: 0.35 },
-  { label: "Asks for your OTP", style: { bottom: "20%", left: "-12%" }, d: 0.7 },
-  { label: "Pretends to be the bank", style: { top: "-5%", right: "-4%" }, d: 1.05 },
-];
-
-function HeroPhone() {
-  return (
-    <div className="relative mx-auto w-[min(21rem,82vw)]">
-      <RadarScope className="left-1/2 top-1/2 w-[175%] -translate-x-1/2 -translate-y-1/2" />
-      {CHIPS.map((c) => (
-        <span key={c.label} className="chip hidden sm:inline-flex" style={{ ...c.style, "--d": c.d } as unknown as CSSProperties}>
-          <span className="dot" aria-hidden />{c.label}
-        </span>
-      ))}
-      <Tilt className="relative z-[1]">
-        <div className="phone phone-in">
-          <div className="phone-screen">
-            <div className="phone-notch" aria-hidden />
-            <div className="flex items-center gap-3 border-b hairline px-4 pb-3 pt-2">
-              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 font-bold text-ink-soft" aria-hidden>?</span>
-              <div className="leading-tight">
-                <p className="text-sm font-semibold text-white">VK-SBIBNK</p>
-                <p className="text-xs text-ink-soft">Not in your contacts</p>
-              </div>
-              <span className="ml-auto rounded-full bg-red-wash px-2.5 py-1 text-xs font-bold text-red">3 red flags</span>
-            </div>
-            <div className="chat-wall relative overflow-hidden px-4 py-6">
-              <span className="scanline" aria-hidden />
-              <div className="bubble max-w-[94%] bg-chat px-4 py-3 text-[0.95rem] leading-[1.9] text-ink" style={{ "--bubble-bg": "var(--color-chat)" } as CSSProperties}>
-                {DEMO.map((d, i) =>
-                  d.m ? (
-                    <span key={i} className="pen-mark live">{d.t}<span className="pen-num">{d.m}</span></span>
-                  ) : (
-                    <span key={i}>{d.t}</span>
-                  ),
-                )}
-              </div>
-              <div className="mt-5 flex items-center gap-3 rounded-2xl border border-red/40 bg-red-wash px-4 py-3">
-                <span className="stamp px-2 py-0.5 text-sm font-bold uppercase text-red">Scam</span>
-                <span className="font-pen text-3xl font-bold text-red">94</span>
-                <span className="text-xs leading-tight text-ink-soft">risk<br />out of 100</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </Tilt>
-    </div>
-  );
-}
 
 const FEATURES = [
   {
@@ -163,7 +102,7 @@ export default function Home() {
               <div><dt className="sr-only">Speed</dt><dd><b className="text-white">~{BENCHMARK.medianSec}s</b> median answer</dd></div>
             </dl>
           </div>
-          <HeroPhone />
+          <LivePhone />
         </div>
       </section>
 
@@ -171,11 +110,11 @@ export default function Home() {
 
       {/* Numbers */}
       <section className="mx-auto max-w-7xl px-4 py-24 sm:px-6">
-        <p className="reveal max-w-4xl text-3xl font-semibold leading-tight tracking-tight sm:text-5xl">
-          <span className="text-gradient">Indians lost </span>
-          <span className="text-threat"><CountUp to={22845} prefix="₹" suffix=" crore" /></span>
-          <span className="text-gradient"> to cyber fraud in a single year.</span>
-        </p>
+        <WordReveal
+          className="max-w-4xl text-3xl font-semibold leading-tight tracking-tight text-white sm:text-5xl"
+          text="Indians lost ₹22,845 crore to cyber fraud in a single year. Most of it started with one message."
+          hl={["₹22,845", "crore", "one", "message"]}
+        />
         <div className="mt-14 grid gap-px overflow-hidden rounded-3xl border hairline bg-white/[0.07] sm:grid-cols-2 lg:grid-cols-4">
           {[
             { n: <CountUp to={36} suffix=" lakh" />, l: "fraud cases reported in 2024" },
@@ -241,9 +180,11 @@ export default function Home() {
         <div className="card zoom-in relative overflow-hidden p-8 sm:p-14">
           <div className="mesh opacity-60" aria-hidden />
           <div className="relative">
-            <p className="ink-fill max-w-4xl text-3xl font-semibold leading-tight tracking-tight sm:text-5xl">
-              Every scam pulls the same seven levers in your head. Learn them once, and the next scam stops working.
-            </p>
+            <WordReveal
+              className="max-w-4xl text-3xl font-semibold leading-tight tracking-tight text-white sm:text-5xl"
+              text="Every scam pulls the same seven levers in your head. Learn them once, and the next scam stops working."
+              hl={["seven", "levers", "stops", "working"]}
+            />
             <p className="mt-6 max-w-2xl text-lg text-ink-soft">
               Built on Cambridge research into how con artists think, and on the science of psychological inoculation.
             </p>
