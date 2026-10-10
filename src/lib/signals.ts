@@ -202,3 +202,32 @@ export function detectSignals(text: string): Signal[] {
 export function ruleScore(signals: Signal[]): number {
   return Math.min(100, signals.reduce((a, s) => a + s.weight, 0));
 }
+
+// Character ranges of rule hits, for live in-browser highlighting while the user types.
+export type Match = { start: number; end: number; label: string };
+
+export function findMatches(text: string): Match[] {
+  const out: Match[] = [];
+  for (const r of RULES) {
+    for (const m of text.matchAll(r.re)) {
+      if (m.index !== undefined) out.push({ start: m.index, end: m.index + m[0].length, label: r.label });
+    }
+  }
+  const bad = new Set(detectSignals(text).filter((s) => !RULES.some((r) => r.id === s.id)).flatMap((s) => s.evidence.split(", ")));
+  for (const m of text.matchAll(URL_RE)) {
+    const h = hostOf(m[1]);
+    if (h && m.index !== undefined && bad.has(h)) out.push({ start: m.index, end: m.index + m[0].length, label: "Suspicious link" });
+  }
+  out.sort((a, b) => a.start - b.start || b.end - a.end);
+  const merged: Match[] = [];
+  for (const m of out) if (!merged.length || m.start >= merged[merged.length - 1].end) merged.push(m);
+  return merged;
+}
+
+// Positive evidence: links that resolve to a known official domain. Fed to the AI so it
+// doesn't flag genuine bank / government messages just for containing words like "KYC" or "OTP".
+const OFFICIAL_SUFFIXES = [".gov.in", ".nic.in", ".bank.in", ...new Set(Object.values(BRANDS).flat().filter((d) => !d.startsWith(".")))];
+
+export function officialHosts(text: string): string[] {
+  return extractHosts(text).filter((h) => OFFICIAL_SUFFIXES.some((d) => (d.startsWith(".") ? h.endsWith(d) : h === d || h.endsWith(`.${d}`))));
+}
