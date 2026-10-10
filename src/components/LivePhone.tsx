@@ -69,19 +69,16 @@ export function LivePhone() {
     setT(0);
   }, [idx]);
 
+  // ~12 updates a second is plenty for this timeline and keeps low-end phones cool.
   useEffect(() => {
-    if (still) return;
-    let raf = 0;
-    const tick = (now: number) => {
-      if (!paused) {
-        const el = now - start.current;
-        setT(el);
-        if (el >= T.end) { setIdx((i) => (i + 1) % SCENARIOS.length); return; }
-      }
-      raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
+    if (still || paused) return;
+    const id = setInterval(() => {
+      if (document.hidden) return;
+      const el = performance.now() - start.current;
+      if (el >= T.end) { setIdx((i) => (i + 1) % SCENARIOS.length); return; }
+      setT(el);
+    }, 80);
+    return () => clearInterval(id);
   }, [idx, paused, still]);
 
   function pause(on: boolean) {
